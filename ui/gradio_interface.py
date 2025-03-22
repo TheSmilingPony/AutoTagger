@@ -1,4 +1,5 @@
 import gradio as gr
+import utils.batch_processing
 import os
 import base64
 from io import BytesIO
@@ -73,6 +74,7 @@ def create_interface(
     
     # Batch processing functions
     def process_folder_path(folder_path, threshold, progress=gr.Progress()):
+        import os
         if not folder_path or not os.path.isdir(folder_path):
             return "<p>Invalid folder path</p>", None, None, None
         
@@ -92,9 +94,24 @@ def create_interface(
         html_output = format_results_as_html(results)
         
         # Create downloadable files
-        csv_file_path = create_csv_file_fn(csv_output)
-        txt_zip_path = create_txt_files_zip_fn(results)
-        all_zip_path = create_txt_and_images_zip_fn(results)
+        import os
+        import tempfile
+        
+        # Create a temporary directory to store the CSV file
+        temp_dir = tempfile.mkdtemp()
+        
+        # Create CSV file
+        csv_file_path = os.path.join(temp_dir, 'results.csv')
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            csvfile.write(csv_output)
+        
+        # Create TXT files zip
+        txt_zip_path = os.path.join(temp_dir, 'tags.zip')
+        create_txt_files_zip_fn(txt_zip_path, results)
+        
+        # Create TXT and images zip
+        all_zip_path = os.path.join(temp_dir, 'tags_and_images.zip')
+        create_txt_and_images_zip_fn(all_zip_path, results)
         
         return html_output, csv_file_path, txt_zip_path, all_zip_path
     def process_url_list(url_text, threshold, progress=gr.Progress()):
@@ -121,9 +138,24 @@ def create_interface(
         html_output = format_results_as_html(results)
         
         # Create downloadable files
-        csv_file_path = create_csv_file_fn(csv_output)
-        txt_zip_path = create_txt_files_zip_fn(results)
-        all_zip_path = create_txt_and_images_zip_fn(results)
+        import os
+        import tempfile
+        
+        # Create a temporary directory to store the CSV file
+        temp_dir = tempfile.mkdtemp()
+        
+        # Create CSV file
+        csv_file_path = os.path.join(temp_dir, 'results.csv')
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            csvfile.write(csv_output)
+        
+        # Create TXT files zip
+        txt_zip_path = os.path.join(temp_dir, 'tags.zip')
+        create_txt_files_zip_fn(txt_zip_path, results)
+        
+        # Create TXT and images zip
+        all_zip_path = os.path.join(temp_dir, 'tags_and_images.zip')
+        create_txt_and_images_zip_fn(all_zip_path, results)
         
         return html_output, csv_file_path, txt_zip_path, all_zip_path
     
@@ -151,9 +183,24 @@ def create_interface(
         html_output = format_results_as_html(results)
         
         # Create downloadable files
-        csv_file_path = create_csv_file_fn(csv_output)
-        txt_zip_path = create_txt_files_zip_fn(results)
-        all_zip_path = create_txt_and_images_zip_fn(results)
+        import os
+        import tempfile
+        
+        # Create a temporary directory to store the CSV file
+        temp_dir = tempfile.mkdtemp()
+        
+        # Create CSV file
+        csv_file_path = os.path.join(temp_dir, 'results.csv')
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            csvfile.write(csv_output)
+        
+        # Create TXT files zip
+        txt_zip_path = os.path.join(temp_dir, 'tags.zip')
+        create_txt_files_zip_fn(txt_zip_path, results)
+        
+        # Create TXT and images zip
+        all_zip_path = os.path.join(temp_dir, 'tags_and_images.zip')
+        create_txt_and_images_zip_fn(all_zip_path, results)
         
         return html_output, csv_file_path, txt_zip_path, all_zip_path
     
